@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  db:
+    container_name: mongo-db
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=adminner
+      - MONGO_INITDB_ROOT_PASSWORD=KdklsfjE23423ASDFds4
+    build:
+      context: ./db/
+      dockerfile: dockerfile
+    volumes:
+      - ./db/data/db:/data/db:rw
+    ports:
+      - "127.0.0.1:27017:27017" # open port for the localhost only
+
+  server:
+    depends_on:
+      - db
+    container_name: node-server
+    restart: always
+    build:
+      context: ./node/
+      dockerfile: dockerfile
+    volumes:
+      - ./node/src:/app/src:ro
+    ports:
+      - 127.0.0.1:3000:3000
+
